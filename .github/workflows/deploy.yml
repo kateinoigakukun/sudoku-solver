@@ -1,0 +1,19 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    name: Deploy artifacts
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Bundle
+      uses: swiftwasm/swiftwasm-action@v5.4
+      with:
+        shell-action: carton bundle --custom-index-page static/index.html
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./Bundle
